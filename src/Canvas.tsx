@@ -32,16 +32,16 @@ export function Canvas() {
   const unwatch = httpPublicClient.watchBlocks(
     {
       onBlock: block => {
+        // @ts-ignore
+        let txReceiptStrings = block.transactions.filter((tx: Hex) => typeof tx === "string");
         setTxReceipts([
-          // @ts-ignore
-          ...new Set([...txReceipts, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
+          ...new Set([...txReceipts, ...txReceiptStrings]),
         ]);
+        setTxHashes([...new Set([...txHashes, ...txReceiptStrings])]);
         setBlocks([...new Set([...blocks, block])]);
       },
     },
   );
-
-  console.log(txReceipts);
 
   return (
     <>
