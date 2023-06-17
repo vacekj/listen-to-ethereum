@@ -17,6 +17,7 @@ specifiers:
   react: ^18.2.0
   react-dom: ^18.2.0
   react-konva: ^18.2.9
+  react-use-audio-player: ^2.0.0
   typescript: ^4.9.5
   viem: ^1.0.7
   vite: ^4.1.1
@@ -32,6 +33,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-konva: 18.2.9_sbyovf4w6tp5qm2lzl6h77elky
+  react-use-audio-player: 2.0.0_react@18.2.0
   viem: 1.0.7_typescript@4.9.5
   wagmi: 1.2.0_eyrzywfgpmotnstwe5qq4unora
 
@@ -3050,6 +3052,10 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /howler/2.2.3:
+    resolution: {integrity: sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==}
+    dev: false
+
   /humanize-ms/1.2.1:
     resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
     dependencies:
@@ -3876,6 +3882,15 @@ packages:
       use-latest: 1.2.1_amj33xoxfucvzb42rb6rqg7bp4
     transitivePeerDependencies:
       - '@types/react'
+    dev: false
+
+  /react-use-audio-player/2.0.0_react@18.2.0:
+    resolution: {integrity: sha512-1XkaeYyZoodryvqMn509yWzjiVozcWmWYmsNXEISw3VGLgdK5PEc9noo7MntmzCfdXovjuASF96s91lgWGyHOQ==}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      howler: 2.2.3
+      react: 18.2.0
     dev: false
 
   /react/18.2.0:

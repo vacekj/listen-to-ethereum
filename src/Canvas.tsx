@@ -1,6 +1,7 @@
 import { Box } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAudioPlayer, useGlobalAudioPlayer } from "react-use-audio-player";
 import { Block, createPublicClient, Hash, Hex, http, Transaction, webSocket } from "viem";
 import { mainnet, useBlockNumber, usePublicClient, useWatchPendingTransactions } from "wagmi";
 
@@ -27,7 +28,6 @@ export function Canvas() {
     },
   });
 
-  const publicClient = usePublicClient();
   const [blocks, setBlocks] = useState<Block[]>([]);
   const unwatch = httpPublicClient.watchBlocks(
     {
@@ -71,6 +71,17 @@ function TxBlob(props: {
   hash: string;
   confirmed: boolean;
 }) {
+  const { load, play } = useAudioPlayer();
+  useEffect(() => {
+    load(
+      `public/sounds/celesta/c${Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")}.mp3`,
+    );
+  }, []);
+
+  useEffect(() => {
+    play();
+  }, []);
+
   const color = stringToColour(props.hash);
   return (
     <motion.div

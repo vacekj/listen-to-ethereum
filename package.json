@@ -18,6 +18,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-konva": "^18.2.9",
+    "react-use-audio-player": "^2.0.0",
     "viem": "^1.0.7",
     "wagmi": "^1.2.0"
   },
