@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@emotion/react': ^11.10.5
+  '@heroicons/react': ^2.0.18
   '@mantine/core': 6.0.13
   '@mantine/hooks': 6.0.13
   '@testing-library/dom': ^9.3.1
@@ -23,6 +24,7 @@ specifiers:
 
 dependencies:
   '@emotion/react': 11.11.1_amj33xoxfucvzb42rb6rqg7bp4
+  '@heroicons/react': 2.0.18_react@18.2.0
   '@mantine/core': 6.0.13_35sh24zri7fccomhiliosnjhvm
   '@mantine/hooks': 6.0.13_react@18.2.0
   '@wagmi/core': 1.2.0_rfbpku6ixkdy6r6hcrvyxp6tiu
@@ -957,6 +959,14 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       tabbable: 6.1.2
+    dev: false
+
+  /@heroicons/react/2.0.18_react@18.2.0:
+    resolution: {integrity: sha512-7TyMjRrZZMBPa+/5Y8lN0iyvUU/01PeMGX2+RE7cQWpEUIcb4QotzUObFkJDejj/HUH4qjP/eQ0gzzKs2f+6Yw==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@jest/expect-utils/29.5.0:

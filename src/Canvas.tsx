@@ -1,4 +1,5 @@
-import { Box, Header } from "@mantine/core";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { ActionIcon, Box, Flex, Header, useMantineColorScheme } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -15,7 +16,6 @@ function useAudioEnabled(): boolean {
   useEffect(() => {
     document.addEventListener("mousedown", () => setHasClickedPage(true));
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener("mousedown", () => setHasClickedPage(true));
     };
   }, []);
@@ -89,17 +89,21 @@ export function Canvas() {
     );
 
     return () => {
-      console.log("unwatched");
       unwatch();
     };
   }, [httpPublicClient]);
 
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
   return (
     <>
-      <Header height={30}>
-        Mempool size: {txHashes.length}
-        Confirmed txs: {txReceipts.length}
-        Blocks: {blocks.length}
+      <Header height={"content"}>
+        <Flex align={"center"} justify={"space-between"} p={10}>
+          <div>Mempool size: {txHashes.length}Confirmed txs: {txReceipts.length}Blocks: {blocks.length}</div>
+          <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
+            {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
+          </ActionIcon>
+        </Flex>
       </Header>
       <div>
         <Box pos={"relative"}>

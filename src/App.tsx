@@ -1,5 +1,4 @@
-import { Box, Container, Flex } from "@mantine/core";
-import { motion } from "framer-motion";
+import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { useState } from "react";
 import { createPublicClient, Hex, http, webSocket } from "viem";
 import { createConfig, mainnet, useBlockNumber, useWatchPendingTransactions, WagmiConfig } from "wagmi";
@@ -15,11 +14,19 @@ const config = createConfig({
 });
 
 export default function App() {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>("light");
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+
   return (
     <ThemeProvider>
-      <WagmiConfig config={config}>
-        <Canvas />
-      </WagmiConfig>
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+          <WagmiConfig config={config}>
+            <Canvas />
+          </WagmiConfig>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </ThemeProvider>
   );
 }
