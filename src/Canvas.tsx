@@ -1,9 +1,9 @@
 import { Box } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useAudioPlayer, useGlobalAudioPlayer } from "react-use-audio-player";
-import { Block, createPublicClient, Hash, Hex, http, Transaction, webSocket } from "viem";
-import { mainnet, useBlockNumber, usePublicClient, useWatchPendingTransactions } from "wagmi";
+import { useCallback, useEffect, useState } from "react";
+import { useAudioPlayer } from "react-use-audio-player";
+import { Block, createPublicClient, Hash, Hex, http } from "viem";
+import { mainnet, useWatchPendingTransactions } from "wagmi";
 
 const httpPublicClient = createPublicClient({
   chain: mainnet,
@@ -11,6 +11,12 @@ const httpPublicClient = createPublicClient({
 });
 
 export function Canvas() {
+  const { load, play, playing } = useAudioPlayer();
+
+  useEffect(() => {
+    load("/sounds/swells/swell1.mp3");
+  }, []);
+
   const [txHashes, setTxHashes] = useState<Hex[]>([]);
   const [txAgeMap, setTxAgeMap] = useState<Map<Hex, number>>(new Map());
   const [txReceipts, setTxReceipts] = useState<Hash[]>([]);
@@ -29,19 +35,39 @@ export function Canvas() {
   });
 
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const unwatch = httpPublicClient.watchBlocks(
-    {
-      onBlock: block => {
+
+  const onBlock = useCallback(
+    (block: Block) => {
+      if (!playing) {
+        play();
+      }
+
+      setTxReceipts((prevReceipts) => [
         // @ts-ignore
-        let txReceiptStrings = block.transactions.filter((tx: Hex) => typeof tx === "string");
-        setTxReceipts([
-          ...new Set([...txReceipts, ...txReceiptStrings]),
-        ]);
-        setTxHashes([...new Set([...txHashes, ...txReceiptStrings])]);
-        setBlocks([...new Set([...blocks, block])]);
-      },
+        ...new Set([...prevReceipts, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
+      ]);
+
+      setTxHashes((prevHashes) => [
+        // @ts-ignore
+        ...new Set([...prevHashes, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
+      ]);
+      setBlocks([...new Set([...blocks, block])]);
     },
+    [txReceipts, txHashes, blocks],
   );
+
+  useEffect(() => {
+    const unwatch = httpPublicClient.watchBlocks(
+      {
+        onBlock,
+      },
+    );
+
+    return () => {
+      console.log("unwatched");
+      unwatch();
+    };
+  }, [httpPublicClient]);
 
   return (
     <>
@@ -52,7 +78,7 @@ export function Canvas() {
         <Box pos={"relative"}>
           <AnimatePresence>
             {txHashes.filter(hash => {
-              return Date.now() - (txAgeMap.get(hash) ?? 0) < 20_000;
+              return Date.now() - (txAgeMap.get(hash) ?? 0) < 12_000;
             }).map(tx => (
               <TxBlob
                 key={tx}
@@ -73,12 +99,13 @@ function TxBlob(props: {
 }) {
   const { load, play } = useAudioPlayer();
   useEffect(() => {
+    if (props.confirmed) {
+      return;
+    }
     load(
       props.confirmed
-        ? `public/sounds/celesta/c${
-          Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")
-        }.mp3`
-        : `public/sounds/clav/c${Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")}.mp3`,
+        ? `/sounds/celesta/c${Math.round(stringToNumberInRange(props.hash, 1, 27)).toString().padStart(3, "0")}.mp3`
+        : `/sounds/clav/c${Math.round(stringToNumberInRange(props.hash, 1, 27)).toString().padStart(3, "0")}.mp3`,
     );
   }, []);
 
@@ -141,7 +168,6 @@ function stringToNumberInRange(input: string, min: number, max: number): number 
 
   // Map the hash value to the desired range
   const range = max - min;
-  const scaled = (Math.abs(hash) % (range + 1)) + min;
 
-  return scaled;
+  return (Math.abs(hash) % (range + 1)) + min;
 }
