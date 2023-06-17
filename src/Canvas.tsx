@@ -1,4 +1,4 @@
-import { Box } from "@mantine/core";
+import { Box, Header } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -10,8 +10,22 @@ const httpPublicClient = createPublicClient({
   transport: http(),
 });
 
+function useAudioEnabled(): boolean {
+  const [hasClickedPage, setHasClickedPage] = useState(false);
+  useEffect(() => {
+    document.addEventListener("mousedown", () => setHasClickedPage(true));
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", () => setHasClickedPage(true));
+    };
+  }, []);
+
+  return hasClickedPage;
+}
+
 export function Canvas() {
-  const { load, play, playing } = useAudioPlayer();
+  const { load, play } = useAudioPlayer();
+  const audioEnabled = useAudioEnabled();
 
   useEffect(() => {
     load("/sounds/swells/swell1.mp3");
@@ -19,6 +33,7 @@ export function Canvas() {
 
   const [txHashes, setTxHashes] = useState<Hex[]>([]);
   const [txAgeMap, setTxAgeMap] = useState<Map<Hex, number>>(new Map());
+  const [txSoundSet, setTxSoundSet] = useState<Set<Hex>>(new Set());
   const [txReceipts, setTxReceipts] = useState<Hash[]>([]);
   useWatchPendingTransactions({
     listener: async (hashes) => {
@@ -30,6 +45,16 @@ export function Canvas() {
         }
       }
       setTxAgeMap(newMap);
+
+      const newSoundSet = txSoundSet;
+      /* If transaction is added after sound has been enabled, set as canPlaySound */
+      for (const hash of hashes) {
+        if (audioEnabled) {
+          newSoundSet.add(hash);
+        }
+      }
+      setTxSoundSet(newSoundSet);
+
       setTxHashes([...new Set([...hashes, ...txHashes])]);
     },
   });
@@ -38,7 +63,9 @@ export function Canvas() {
 
   const onBlock = useCallback(
     (block: Block) => {
-      play();
+      if (audioEnabled) {
+        play();
+      }
 
       setTxReceipts((prevReceipts) => [
         // @ts-ignore
@@ -49,9 +76,9 @@ export function Canvas() {
         // @ts-ignore
         ...new Set([...prevHashes, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
       ]);
-      setBlocks([...new Set([...blocks, block])]);
+      setBlocks((blocks) => [...new Set([...blocks, block])]);
     },
-    [txReceipts, txHashes, blocks],
+    [txReceipts, txHashes, blocks, audioEnabled],
   );
 
   useEffect(() => {
@@ -69,16 +96,19 @@ export function Canvas() {
 
   return (
     <>
-      <div>
+      <Header height={30}>
         Mempool size: {txHashes.length}
         Confirmed txs: {txReceipts.length}
         Blocks: {blocks.length}
+      </Header>
+      <div>
         <Box pos={"relative"}>
           <AnimatePresence>
             {txHashes.filter(hash => {
               return Date.now() - (txAgeMap.get(hash) ?? 0) < 12_000;
             }).map(tx => (
               <TxBlob
+                shouldPlaySounds={txSoundSet.has(tx)}
                 key={tx}
                 confirmed={txReceipts.some(receipt => receipt === tx)}
                 hash={tx}
@@ -94,8 +124,10 @@ export function Canvas() {
 function TxBlob(props: {
   hash: string;
   confirmed: boolean;
+  shouldPlaySounds: boolean;
 }) {
   const { load, play } = useAudioPlayer();
+  const audioEnabled = useAudioEnabled();
   useEffect(() => {
     if (props.confirmed) {
       return;
@@ -108,8 +140,10 @@ function TxBlob(props: {
   }, []);
 
   useEffect(() => {
-    play();
-  }, []);
+    if (props.shouldPlaySounds) {
+      play();
+    }
+  }, [audioEnabled]);
 
   const color = stringToColour(props.hash);
   return (

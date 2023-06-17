@@ -1,3 +1,5 @@
+import { Box, Container, Flex } from "@mantine/core";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { createPublicClient, Hex, http, webSocket } from "viem";
 import { createConfig, mainnet, useBlockNumber, useWatchPendingTransactions, WagmiConfig } from "wagmi";
