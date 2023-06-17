@@ -74,7 +74,11 @@ function TxBlob(props: {
   const { load, play } = useAudioPlayer();
   useEffect(() => {
     load(
-      `public/sounds/celesta/c${Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")}.mp3`,
+      props.confirmed
+        ? `public/sounds/celesta/c${
+          Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")
+        }.mp3`
+        : `public/sounds/clav/c${Math.round(stringToNumberInRange(props.hash, 0, 27)).toString().padStart(3, "0")}.mp3`,
     );
   }, []);
 
