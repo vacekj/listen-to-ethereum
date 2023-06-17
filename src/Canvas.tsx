@@ -38,9 +38,7 @@ export function Canvas() {
 
   const onBlock = useCallback(
     (block: Block) => {
-      if (!playing) {
-        play();
-      }
+      play();
 
       setTxReceipts((prevReceipts) => [
         // @ts-ignore
