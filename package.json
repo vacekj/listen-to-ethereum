@@ -13,6 +13,7 @@
     "@mantine/core": "6.0.0",
     "@mantine/hooks": "6.0.0",
     "@wagmi/core": "^1.2.0",
+    "framer-motion": "^10.12.16",
     "konva": "^9.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

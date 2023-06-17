@@ -1,61 +1,104 @@
+import { Box } from "@mantine/core";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { Circle, Layer, Stage } from "react-konva";
-import { Block, Hex, Transaction, TransactionReceipt } from "viem";
-import { serialize, useBlockNumber, usePublicClient, useWatchPendingTransactions } from "wagmi";
+import { Block, createPublicClient, Hash, Hex, http, Transaction, webSocket } from "viem";
+import { mainnet, useBlockNumber, usePublicClient, useWatchPendingTransactions } from "wagmi";
+
+const httpPublicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(),
+});
 
 export function Canvas() {
   const [txHashes, setTxHashes] = useState<Hex[]>([]);
-  const [txReceipts, setTxReceipts] = useState<Transaction[]>([]);
+  const [txAgeMap, setTxAgeMap] = useState<Map<Hex, number>>(new Map());
+  const [txReceipts, setTxReceipts] = useState<Hash[]>([]);
   useWatchPendingTransactions({
     listener: async (hashes) => {
-      setTxHashes([...new Set([...txHashes, ...hashes])]);
+      const newMap = txAgeMap;
+      /* If transaction is seen first time, add its age to map*/
+      for (const hash of hashes) {
+        if (!newMap.has(hash)) {
+          newMap.set(hash, Date.now());
+        }
+      }
+      setTxAgeMap(newMap);
+      setTxHashes([...new Set([...hashes, ...txHashes])]);
     },
   });
 
   const publicClient = usePublicClient();
   const [blocks, setBlocks] = useState<Block[]>([]);
-  const { data: blockNumber } = useBlockNumber({
-    watch: true,
-    onBlock: async (blockNumber) => {
-      const block = await publicClient.getBlock({
-        blockNumber: blockNumber,
-      });
-      for (const tx of block.transactions) {
-        if (typeof tx !== "string") {
-          setTxReceipts([...new Set([...txReceipts, tx])]);
-        }
-      }
-      setBlocks([...blocks, block]);
+  const unwatch = httpPublicClient.watchBlocks(
+    {
+      onBlock: block => {
+        setTxReceipts([
+          // @ts-ignore
+          ...new Set([...txReceipts, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
+        ]);
+        setBlocks([...new Set([...blocks, block])]);
+      },
     },
-  });
+  );
+
+  console.log(txReceipts);
 
   return (
     <>
       <div>
         Mempool size: {txHashes.length}
         Confirmed txs: {txReceipts.length}
-        Blocknumber: {blockNumber?.toString()}
         Blocks: {blocks.length}
+        <Box pos={"relative"}>
+          <AnimatePresence>
+            {txHashes.filter(hash => {
+              return Date.now() - (txAgeMap.get(hash) ?? 0) < 20_000;
+            }).map(tx => (
+              <TxBlob
+                key={tx}
+                confirmed={txReceipts.some(receipt => receipt === tx)}
+                hash={tx}
+              />
+            ))}
+          </AnimatePresence>
+        </Box>
       </div>
-      <Stage width={window.innerWidth} height={window.innerHeight}>
-        <Layer>
-          {txHashes.map(hash => <TxBlob hash={hash} />)}
-        </Layer>
-      </Stage>
     </>
   );
 }
 
 function TxBlob(props: {
   hash: string;
+  confirmed: boolean;
 }) {
+  const color = stringToColour(props.hash);
   return (
-    <Circle
-      y={stringToNumberInRange(props.hash, 0, window.innerWidth)}
-      x={stringToNumberInRange(props.hash, 0, window.innerHeight)}
-      radius={50}
-      fill={stringToColour(props.hash)}
-    />
+    <motion.div
+      exit={{
+        opacity: 0,
+      }}
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: props.confirmed ? 1 : 0.3,
+      }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        overflow: "hidden",
+        height: 100,
+        width: 100,
+        borderRadius: 50,
+        background: color,
+        position: "absolute",
+        top: stringToNumberInRange(props.hash, 100, window.innerHeight - 200),
+        left: stringToNumberInRange(props.hash, 100, window.innerWidth - 200),
+      }}
+    >
+      {props.hash.substring(0, 9)}
+    </motion.div>
   );
 }
 
