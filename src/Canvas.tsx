@@ -1,5 +1,5 @@
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { ActionIcon, Box, Flex, Header, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, Box, Container, Flex, Header, Title, useMantineColorScheme } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -98,12 +98,14 @@ export function Canvas() {
   return (
     <>
       <Header height={"content"}>
-        <Flex align={"center"} justify={"space-between"} p={10}>
-          <div>Mempool size: {txHashes.length}Confirmed txs: {txReceipts.length}Blocks: {blocks.length}</div>
-          <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
-            {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
-          </ActionIcon>
-        </Flex>
+        <Container>
+          <Flex align={"center"} justify={"space-between"} p={10}>
+            <Title order={3}>Listen to Ethereum</Title>
+            <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
+              {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
+            </ActionIcon>
+          </Flex>
+        </Container>
       </Header>
       <div>
         <Box pos={"relative"}>
@@ -152,14 +154,21 @@ function TxBlob(props: {
   const color = stringToColour(props.hash);
   return (
     <motion.div
+      transition={{
+        duration: 0.5,
+        ease: "anticipate",
+      }}
       exit={{
         opacity: 0,
+        scale: 0,
       }}
       initial={{
         opacity: 0,
+        scale: 0.9,
       }}
       animate={{
         opacity: props.confirmed ? 1 : 0.3,
+        scale: 1,
       }}
       style={{
         display: "flex",
