@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createPublicClient, Hex, http, webSocket } from "viem";
 import { createConfig, mainnet, useBlockNumber, useWatchPendingTransactions, WagmiConfig } from "wagmi";
+import { Canvas } from "./Canvas";
 import { ThemeProvider } from "./ThemeProvider";
 
 const config = createConfig({
@@ -12,27 +13,10 @@ const config = createConfig({
 });
 
 export default function App() {
-  const [txHashes, setTxHashes] = useState<Hex[]>([]);
-  useWatchPendingTransactions({
-    listener: (hashes) => {
-      // setTxHashes([...new Set([...txHashes, ...hashes])]);
-      /* display a new tx hash blob */
-
-      /* wait for transaction and change blob to tx blob (change size based on value / data size if no value) */
-
-      /* wait for transaction receipt (confirmation) and change to receipt blob */
-    },
-  });
-
-  const { data: blockNumber } = useBlockNumber({});
-
   return (
     <ThemeProvider>
       <WagmiConfig config={config}>
-        <>
-          Mempool size: {txHashes.length}
-          Blocknumber: {blockNumber}
-        </>
+        <Canvas />
       </WagmiConfig>
     </ThemeProvider>
   );
