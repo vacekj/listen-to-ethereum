@@ -1,5 +1,6 @@
+import { useAudioEnabled, useVolumeStore } from "@/hooks";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { ActionIcon, Box, Container, Flex, Header, Title, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, Box, Container, Flex, Group, Header, Slider, Title, useMantineColorScheme } from "@mantine/core";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -11,21 +12,10 @@ const httpPublicClient = createPublicClient({
   transport: http(),
 });
 
-function useAudioEnabled(): boolean {
-  const [hasClickedPage, setHasClickedPage] = useState(false);
-  useEffect(() => {
-    document.addEventListener("mousedown", () => setHasClickedPage(true));
-    return () => {
-      document.removeEventListener("mousedown", () => setHasClickedPage(true));
-    };
-  }, []);
-
-  return hasClickedPage;
-}
-
 export function Canvas() {
   const { load, play } = useAudioPlayer();
   const audioEnabled = useAudioEnabled();
+  const { volume, setVolume } = useVolumeStore();
 
   useEffect(() => {
     load("/sounds/swells/swell1.mp3");
@@ -91,16 +81,19 @@ export function Canvas() {
     return () => {
       unwatch();
     };
-  }, [httpPublicClient]);
+  }, [httpPublicClient, audioEnabled]);
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
   return (
     <>
       <Header height={"content"}>
         <Container>
           <Flex align={"center"} justify={"space-between"} p={10}>
             <Title order={3}>Listen to Ethereum</Title>
+            <Group>
+              Volume
+              <Slider min={0} max={100} w={"10rem"} value={volume} onChange={setVolume} />
+            </Group>
             <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
               {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
             </ActionIcon>
@@ -132,7 +125,12 @@ function TxBlob(props: {
   confirmed: boolean;
   shouldPlaySounds: boolean;
 }) {
-  const { load, play } = useAudioPlayer();
+  const { load, play, setVolume } = useAudioPlayer();
+  const { volume } = useVolumeStore();
+  useEffect(() => {
+    setVolume(volume);
+  }, [volume]);
+
   const audioEnabled = useAudioEnabled();
   useEffect(() => {
     if (props.confirmed) {
