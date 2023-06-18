@@ -2,6 +2,7 @@ import { useAudioEnabled, useVolumeStore } from "@/hooks";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
+import { useNetwork } from "wagmi";
 
 export function TxBlob(props: {
   hash: string;
@@ -13,6 +14,8 @@ export function TxBlob(props: {
   useEffect(() => {
     setVolume(volume);
   }, [volume]);
+
+  const { chain } = useNetwork();
 
   const audioEnabled = useAudioEnabled();
   useEffect(() => {
@@ -34,7 +37,8 @@ export function TxBlob(props: {
 
   const color = stringToColour(props.hash);
   return (
-    <motion.div
+    <motion.a
+      href={`${chain?.blockExplorers?.default.url ?? "https://etherscan.io/tx/"}${props.hash}`}
       transition={{
         duration: 0.5,
         ease: "anticipate",
@@ -52,6 +56,8 @@ export function TxBlob(props: {
         scale: 1,
       }}
       style={{
+        color: 'black',
+        textDecoration: 'none',
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -66,7 +72,7 @@ export function TxBlob(props: {
       }}
     >
       {props.hash.substring(0, 9)}
-    </motion.div>
+    </motion.a>
   );
 }
 
