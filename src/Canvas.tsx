@@ -14,12 +14,13 @@ const httpPublicClient = createPublicClient({
 });
 
 export function Canvas() {
-  const { load, play } = useAudioPlayer();
+  const { load, play, setVolume: setVol } = useAudioPlayer();
   const audioEnabled = useAudioEnabled();
   const { volume, setVolume } = useVolumeStore();
 
   useEffect(() => {
     load("/sounds/swells/swell1.mp3");
+    setVol(0.3);
   }, []);
 
   const [txHashes, setTxHashes] = useState<Hex[]>([]);
@@ -93,7 +94,7 @@ export function Canvas() {
             <Title order={3}>Listen to Ethereum</Title>
             <Group>
               Volume
-              <Slider min={0} max={100} w={"10rem"} value={volume} onChange={setVolume} />
+              <Slider min={0} max={1} w={"10rem"} value={volume} onChange={setVolume} />
             </Group>
             <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
               {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}

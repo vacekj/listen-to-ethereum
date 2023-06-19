@@ -11,7 +11,7 @@ export const useVolumeStore = create<BearState>()(
   devtools(
     persist(
       (set) => ({
-        volume: 0,
+        volume: 0.3,
         setVolume: (to) => set((state) => ({ volume: to })),
       }),
       {
