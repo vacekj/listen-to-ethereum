@@ -1,5 +1,7 @@
 # Listen to Ethereum
 
+[Stay a while and listen...](https://listen.atris.cc)
+
 Inspired by [Listen to Wikipedia](https://listen.hatnote.com)
 
 todo list:
@@ -8,10 +10,13 @@ todo list:
 - [ ] mute/unmute by clicking on volume button
 - [x] debouncing / anticrash => sound queue system, delay at least 50ms of each other
 - [ ] better animation
+- [ ] Add click for sound reminder
 - [ ] nicer UI
-- [ ] short explainer a-la hatnote
+- [ ] Fullscreen mode
+- [ ] Blocks appear as big blobs and draw mempool txs into it (animated)
 - [ ] smol tps meter
 - [ ] txs, blocks listened count
+- [x] short explainer a-la hatnote
 - [x] google analytics
 - [x] OpenGraph for twitter sharing
 - [x] volume slider
