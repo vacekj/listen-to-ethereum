@@ -1,4 +1,4 @@
-import { useAudioEnabled, useVolumeStore } from "@/hooks";
+import { useAudioEnabled, usePlayAudio, useVolumeStore } from "@/hooks";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useAudioPlayer } from "react-use-audio-player";
@@ -7,33 +7,20 @@ import { useNetwork } from "wagmi";
 export function TxBlob(props: {
   hash: string;
   confirmed: boolean;
-  shouldPlaySounds: boolean;
+  shouldPlaySound: boolean;
 }) {
-  const { load, play, setVolume } = useAudioPlayer();
-  const { volume } = useVolumeStore();
-  useEffect(() => {
-    setVolume(volume);
-  }, [volume]);
-
+  const { play } = usePlayAudio();
   const { chain } = useNetwork();
 
-  const audioEnabled = useAudioEnabled();
   useEffect(() => {
-    if (props.confirmed) {
-      return;
+    if (props.shouldPlaySound) {
+      play(
+        props.confirmed
+          ? `celesta-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`
+          : `clav-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`,
+      );
     }
-    load(
-      props.confirmed
-        ? `/sounds/celesta/c${Math.round(stringToNumberInRange(props.hash, 1, 27)).toString().padStart(3, "0")}.mp3`
-        : `/sounds/clav/c${Math.round(stringToNumberInRange(props.hash, 1, 27)).toString().padStart(3, "0")}.mp3`,
-    );
   }, []);
-
-  useEffect(() => {
-    if (props.shouldPlaySounds) {
-      play();
-    }
-  }, [audioEnabled]);
 
   const color = stringToColour(props.hash);
   return (
@@ -45,7 +32,7 @@ export function TxBlob(props: {
       }}
       exit={{
         opacity: 0,
-        scale: 0,
+        scale: 1.6,
       }}
       initial={{
         opacity: 0,
@@ -53,11 +40,11 @@ export function TxBlob(props: {
       }}
       animate={{
         opacity: props.confirmed ? 1 : 0.3,
-        scale: 1,
+        scale: props.confirmed ? 1.1 : 1,
       }}
       style={{
-        color: 'black',
-        textDecoration: 'none',
+        color: "black",
+        textDecoration: "none",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

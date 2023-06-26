@@ -1,10 +1,9 @@
-import { useAudioEnabled, useVolumeStore } from "@/hooks";
+import { usePlayAudio, useVolumeStore } from "@/hooks";
 import { TxBlob } from "@/TxBlob";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { ActionIcon, Box, Container, Flex, Group, Header, Slider, Title, useMantineColorScheme } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { useAudioPlayer } from "react-use-audio-player";
 import { Block, createPublicClient, Hash, Hex, http } from "viem";
 import { mainnet, useWatchPendingTransactions } from "wagmi";
 
@@ -14,14 +13,8 @@ const httpPublicClient = createPublicClient({
 });
 
 export function Canvas() {
-  const { load, play, setVolume: setVol } = useAudioPlayer();
-  const audioEnabled = useAudioEnabled();
+  const { play } = usePlayAudio();
   const { volume, setVolume } = useVolumeStore();
-
-  useEffect(() => {
-    load("/sounds/swells/swell1.mp3");
-    setVol(0.3);
-  }, []);
 
   const [txHashes, setTxHashes] = useState<Hex[]>([]);
   const [txAgeMap, setTxAgeMap] = useState<Map<Hex, number>>(new Map());
@@ -41,9 +34,7 @@ export function Canvas() {
       const newSoundSet = txSoundSet;
       /* If transaction is added after sound has been enabled, set as canPlaySound */
       for (const hash of hashes) {
-        if (audioEnabled) {
-          newSoundSet.add(hash);
-        }
+        newSoundSet.add(hash);
       }
       setTxSoundSet(newSoundSet);
 
@@ -55,9 +46,7 @@ export function Canvas() {
 
   const onBlock = useCallback(
     (block: Block) => {
-      if (audioEnabled) {
-        play();
-      }
+      play("swell-1");
 
       setTxReceipts((prevReceipts) => [
         // @ts-ignore
@@ -70,7 +59,7 @@ export function Canvas() {
       ]);
       setBlocks((blocks) => [...new Set([...blocks, block])]);
     },
-    [txReceipts, txHashes, blocks, audioEnabled],
+    [txReceipts, txHashes, blocks],
   );
 
   useEffect(() => {
@@ -83,7 +72,7 @@ export function Canvas() {
     return () => {
       unwatch();
     };
-  }, [httpPublicClient, audioEnabled]);
+  }, [httpPublicClient]);
 
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   return (
@@ -94,7 +83,14 @@ export function Canvas() {
             <Title order={3}>Listen to Ethereum</Title>
             <Group>
               Volume
-              <Slider min={0} max={1} w={"10rem"} value={volume} onChange={setVolume} />
+              <Slider
+                min={0}
+                max={100}
+                w={"10rem"}
+                label={(value) => value.toFixed(0)}
+                value={volume * 100}
+                onChange={setVolume}
+              />
             </Group>
             <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
               {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
@@ -109,7 +105,7 @@ export function Canvas() {
               return Date.now() - (txAgeMap.get(hash) ?? 0) < 12_000;
             }).map(tx => (
               <TxBlob
-                shouldPlaySounds={txSoundSet.has(tx)}
+                shouldPlaySound={txSoundSet.has(tx)}
                 key={tx}
                 confirmed={txReceipts.some(receipt => receipt === tx)}
                 hash={tx}
