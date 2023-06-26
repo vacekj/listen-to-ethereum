@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { Block, createPublicClient, Hash, Hex, http } from "viem";
+import { Block, createPublicClient, Hash, Hex, http, Transaction } from "viem";
 import { mainnet, useWatchPendingTransactions } from "wagmi";
 
 const httpPublicClient = createPublicClient({
@@ -59,7 +59,6 @@ export function Canvas() {
   const onBlock = useCallback(
     (block: Block) => {
       play(`swell-${Math.round(stringToNumberInRange(block.transactionsRoot, 1, 3))}`);
-
       setTxReceipts((prevReceipts) => [
         // @ts-ignore
         ...new Set([...prevReceipts, ...block.transactions.filter((tx: Hex) => typeof tx === "string")]),
@@ -130,14 +129,21 @@ export function Canvas() {
         <Title my={24} order={3}>
           Listen to Ethereum is an experiment in blockchain visualization.
         </Title>
-        <Text>
-          . Each transaction that comes to the mempool is represented as a blob. When it gets included in a block, it
-          grows in size and becomes solid. A note is played for each transaction and block that appears.
+        <Text mb={14}>
+          Blockchains are living organisms. The mempool buzzes with activity as new transactions come in, all desiring
+          to be included in the next block. Some make it, some have to wait, and some are never included. This is an
+          exploration of Ethereum as an organism. An attempt to synthesize its beauty into sound and visuals. May you
+          draw inspiration from the endless stream of activity that is Ethereum.
         </Text>
-        <Text>
+        <Text mb={14}>
+          Each transaction that comes to the mempool is represented as a blob. When it gets included in a block, it
+          grows in size and becomes solid. A note is played for each transaction that appears, and a swelling sound is
+          played when a block is produced. You can click a blob to view the transaction in an explorer.
+        </Text>
+        <Text mb={14}>
           Made by <a href="https://twitter.com/atris_eth">atris</a>
         </Text>
-        <Text>
+        <Text mb={14}>
           <a href="https://github.com/vacekj/listen-to-ethereum">source code</a> - Inspired by{" "}
           <a href={"https://listen.hatnote.com"} target={"_blank"}>Listen to Wikipedia</a>
         </Text>
