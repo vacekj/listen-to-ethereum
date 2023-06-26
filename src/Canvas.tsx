@@ -105,7 +105,6 @@ export function Canvas() {
               return Date.now() - (txAgeMap.get(hash) ?? 0) < 12_000;
             }).map(tx => (
               <TxBlob
-                shouldPlaySound={txSoundSet.has(tx)}
                 key={tx}
                 confirmed={txReceipts.some(receipt => receipt === tx)}
                 hash={tx}

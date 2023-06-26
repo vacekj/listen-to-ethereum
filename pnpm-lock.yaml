@@ -9,11 +9,13 @@ specifiers:
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/react': ^14.0.0
   '@testing-library/user-event': ^14.4.3
+  '@types/lodash': ^4.14.195
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
   '@vitejs/plugin-react': ^4.0.0
   '@wagmi/core': ^1.2.0
   framer-motion: ^10.12.16
+  lodash: ^4.17.21
   react: ^18.2.0
   react-dom: ^18.2.0
   react-use-audio-player: ^2.0.0
@@ -31,6 +33,7 @@ dependencies:
   '@mantine/hooks': 6.0.13_react@18.2.0
   '@wagmi/core': 1.2.0_rfbpku6ixkdy6r6hcrvyxp6tiu
   framer-motion: 10.12.16_biqbaboplfbrettd7655fr4n2y
+  lodash: 4.17.21
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-use-audio-player: 2.0.0_react@18.2.0
@@ -44,6 +47,7 @@ devDependencies:
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 14.0.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/user-event': 14.4.3_@testing-library+dom@9.3.1
+  '@types/lodash': 4.14.195
   '@types/react': 18.2.12
   '@types/react-dom': 18.2.5
   '@vitejs/plugin-react': 4.0.0_vite@4.3.9
@@ -1663,6 +1667,10 @@ packages:
     dependencies:
       expect: 29.5.0
       pretty-format: 29.5.0
+    dev: true
+
+  /@types/lodash/4.14.195:
+    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
     dev: true
 
   /@types/ms/0.7.31:
@@ -3407,7 +3415,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}

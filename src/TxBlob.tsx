@@ -1,25 +1,21 @@
-import { useAudioEnabled, usePlayAudio, useVolumeStore } from "@/hooks";
+import { usePlayAudio } from "@/hooks";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import { useAudioPlayer } from "react-use-audio-player";
 import { useNetwork } from "wagmi";
 
 export function TxBlob(props: {
   hash: string;
   confirmed: boolean;
-  shouldPlaySound: boolean;
 }) {
   const { play } = usePlayAudio();
   const { chain } = useNetwork();
 
   useEffect(() => {
-    if (props.shouldPlaySound) {
-      play(
-        props.confirmed
-          ? `celesta-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`
-          : `clav-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`,
-      );
-    }
+    play(
+      props.confirmed
+        ? `celesta-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`
+        : `clav-${Math.round(stringToNumberInRange(props.hash, 1, 27))}`,
+    );
   }, []);
 
   const color = stringToColour(props.hash);

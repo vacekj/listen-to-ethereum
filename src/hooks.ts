@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
@@ -21,14 +22,6 @@ export const useVolumeStore = create<BearState>()(
   ),
 );
 
-export const debounce = (fn: Function, ms = 100) => {
-  let timeoutId: ReturnType<typeof setTimeout>;
-  return function(this: any, ...args: any[]) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), ms);
-  };
-};
-
 const sounds = new Map<string, HTMLAudioElement>();
 Array(27).fill(null).forEach((_, i) => {
   sounds.set(`celesta-${i + 1}`, new Audio(`/sounds/celesta/c${i.toString().padStart(3, "0")}.mp3`));
@@ -37,11 +30,11 @@ Array(27).fill(null).forEach((_, i) => {
 Array(3).fill(null).forEach((_, i) => {
   sounds.set(`swell-${i + 1}`, new Audio(`/sounds/swells/swell${i.toString()}.mp3`));
 });
-const debouncedPlay = debounce((sound: string) => {
+const debouncedPlay = _.throttle((sound: string) => {
   console.log(`playing ${sound}`);
   const audio = sounds.get(sound);
   audio?.play();
-});
+}, 50);
 
 export function usePlayAudio() {
   useEffect(() => {
