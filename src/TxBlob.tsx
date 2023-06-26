@@ -73,7 +73,7 @@ const stringToColour = function(str: string): string {
   return colour;
 };
 
-function stringToNumberInRange(input: string, min: number, max: number): number {
+export function stringToNumberInRange(input: string, min: number, max: number): number {
   // Hash the input string
   let hash = 0;
   for (let i = 0; i < input.length; i++) {

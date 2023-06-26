@@ -24,17 +24,21 @@ export const useVolumeStore = create<BearState>()(
 
 const sounds = new Map<string, HTMLAudioElement>();
 Array(27).fill(null).forEach((_, i) => {
-  sounds.set(`celesta-${i + 1}`, new Audio(`/sounds/celesta/c${i.toString().padStart(3, "0")}.mp3`));
-  sounds.set(`clav-${i + 1}`, new Audio(`/sounds/clav/c${i.toString().padStart(3, "0")}.mp3`));
+  sounds.set(`celesta-${i + 1}`, new Audio(`/sounds/celesta/c${(i + 1).toString().padStart(3, "0")}.mp3`));
+  sounds.set(`clav-${i + 1}`, new Audio(`/sounds/clav/c${(i + 1).toString().padStart(3, "0")}.mp3`));
 });
 Array(3).fill(null).forEach((_, i) => {
-  sounds.set(`swell-${i + 1}`, new Audio(`/sounds/swells/swell${i.toString()}.mp3`));
+  sounds.set(`swell-${i + 1}`, new Audio(`/sounds/swells/swell${(i + 1).toString()}.mp3`));
 });
 const debouncedPlay = _.throttle((sound: string) => {
-  console.log(`playing ${sound}`);
   const audio = sounds.get(sound);
   audio?.play();
 }, 50);
+
+const debouncedSwellPlay = _.throttle((sound: string) => {
+  const audio = sounds.get(sound);
+  audio?.play();
+}, 300);
 
 export function usePlayAudio() {
   useEffect(() => {
@@ -47,7 +51,7 @@ export function usePlayAudio() {
   }, []);
 
   return {
-    play: (sound: string) => debouncedPlay(sound),
+    play: (sound: string) => sound.includes("swell") ? debouncedSwellPlay(sound) : debouncedPlay(sound),
   };
 }
 

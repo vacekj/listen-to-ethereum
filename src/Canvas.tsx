@@ -1,5 +1,5 @@
 import { usePlayAudio, useVolumeStore } from "@/hooks";
-import { TxBlob } from "@/TxBlob";
+import { stringToNumberInRange, TxBlob } from "@/TxBlob";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { ActionIcon, Box, Container, Flex, Group, Header, Slider, Title, useMantineColorScheme } from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
@@ -46,7 +46,7 @@ export function Canvas() {
 
   const onBlock = useCallback(
     (block: Block) => {
-      play("swell-1");
+      play(`swell-${Math.round(stringToNumberInRange(block.transactionsRoot, 1, 3))}`);
 
       setTxReceipts((prevReceipts) => [
         // @ts-ignore
