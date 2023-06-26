@@ -1,7 +1,19 @@
 import { usePlayAudio, useVolumeStore } from "@/hooks";
 import { stringToNumberInRange, TxBlob } from "@/TxBlob";
 import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { ActionIcon, Box, Container, Flex, Group, Header, Slider, Title, useMantineColorScheme } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Container,
+  Flex,
+  Group,
+  Header,
+  Slider,
+  Stack,
+  Text,
+  Title,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { Block, createPublicClient, Hash, Hex, http } from "viem";
@@ -77,29 +89,30 @@ export function Canvas() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   return (
     <>
-      <Header height={"content"}>
-        <Container>
-          <Flex align={"center"} justify={"space-between"} p={10}>
-            <Title order={3}>Listen to Ethereum</Title>
-            <Group>
-              Volume
-              <Slider
-                min={0}
-                max={100}
-                w={"10rem"}
-                label={(value) => value.toFixed(0)}
-                value={volume * 100}
-                onChange={setVolume}
-              />
-            </Group>
-            <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
-              {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
-            </ActionIcon>
-          </Flex>
-        </Container>
-      </Header>
-      <div>
-        <Box pos={"relative"}>
+      <Stack h={"100vh"}>
+        <Header height={"content"}>
+          <Container>
+            <Flex align={"center"} justify={"space-between"} p={10}>
+              <Title order={3}>Listen to Ethereum</Title>
+              <Group>
+                Volume
+                <Slider
+                  min={0}
+                  max={100}
+                  w={"10rem"}
+                  label={(value) => value.toFixed(0)}
+                  value={volume * 100}
+                  onChange={setVolume}
+                />
+              </Group>
+              <ActionIcon onClick={() => toggleColorScheme()} color={colorScheme} size="lg" variant="subtle">
+                {/*TODO: read an sync color scheme from browser*/}
+                {colorScheme === "dark" ? <MoonIcon /> : <SunIcon />}
+              </ActionIcon>
+            </Flex>
+          </Container>
+        </Header>
+        <Box pos={"relative"} h={"100%"}>
           <AnimatePresence>
             {txHashes.filter(hash => {
               return Date.now() - (txAgeMap.get(hash) ?? 0) < 12_000;
@@ -112,7 +125,18 @@ export function Canvas() {
             ))}
           </AnimatePresence>
         </Box>
-      </div>
+      </Stack>
+      <Container>
+        <Title my={24} order={3}>
+          Listen to Ethereum is an experiment in generating music from blockchain activity.
+        </Title>
+        <Text>
+          It is inspired by{" "}
+          <a href={"https://listen.hatnote.com"} target={"_blank"}>Listen to Wikipedia</a>. Each transaction that comes
+          to the mempool is represented as a blob. When it gets included in a block, it grows in size and becomes solid.
+          A note is played for each transaction and block that appears.
+        </Text>
+      </Container>
     </>
   );
 }

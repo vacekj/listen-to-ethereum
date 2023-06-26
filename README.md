@@ -12,8 +12,8 @@ todo list:
 - [ ] short explainer a-la hatnote
 - [ ] smol tps meter
 - [ ] txs, blocks listened count
-- [ ] google analytics
-- [ ] OpenGraph for twitter sharing
+- [x] google analytics
+- [x] OpenGraph for twitter sharing
 - [x] volume slider
 - [x] fix block sound (doesn't play rn)
 - [x] blobs are clickable to tx explorer
