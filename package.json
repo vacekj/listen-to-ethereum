@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.0.18",
     "@mantine/core": "6.0.13",
     "@mantine/hooks": "6.0.13",
+    "@vercel/analytics": "^1.0.1",
     "@wagmi/core": "^1.2.0",
     "framer-motion": "^10.12.16",
     "lodash": "^4.17.21",

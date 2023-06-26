@@ -12,6 +12,7 @@ specifiers:
   '@types/lodash': ^4.14.195
   '@types/react': ^18.0.27
   '@types/react-dom': ^18.0.10
+  '@vercel/analytics': ^1.0.1
   '@vitejs/plugin-react': ^4.0.0
   '@wagmi/core': ^1.2.0
   framer-motion: ^10.12.16
@@ -32,6 +33,7 @@ dependencies:
   '@heroicons/react': 2.0.18_react@18.2.0
   '@mantine/core': 6.0.13_35sh24zri7fccomhiliosnjhvm
   '@mantine/hooks': 6.0.13_react@18.2.0
+  '@vercel/analytics': 1.0.1
   '@wagmi/core': 1.2.0_rfbpku6ixkdy6r6hcrvyxp6tiu
   framer-motion: 10.12.16_biqbaboplfbrettd7655fr4n2y
   lodash: 4.17.21
@@ -1738,6 +1740,10 @@ packages:
     dependencies:
       '@types/yargs-parser': 21.0.0
     dev: true
+
+  /@vercel/analytics/1.0.1:
+    resolution: {integrity: sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow==}
+    dev: false
 
   /@vitejs/plugin-react/4.0.0_vite@4.3.9:
     resolution: {integrity: sha512-HX0XzMjL3hhOYm+0s95pb0Z7F8O81G7joUHgfDd/9J/ZZf5k4xX6QAMFkKsHFxaHlf6X7GD7+XuaZ66ULiJuhQ==}

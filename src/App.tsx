@@ -1,4 +1,5 @@
 import { ColorScheme, ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { Analytics } from "@vercel/analytics/react";
 import { useState } from "react";
 import { createPublicClient, Hex, http, webSocket } from "viem";
 import { createConfig, mainnet, useBlockNumber, useWatchPendingTransactions, WagmiConfig } from "wagmi";
@@ -20,6 +21,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
+      <Analytics />
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <WagmiConfig config={config}>
