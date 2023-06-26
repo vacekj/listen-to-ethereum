@@ -42,6 +42,11 @@ const debouncedSwellPlay = _.throttle((sound: string) => {
 
 export function usePlayAudio() {
   useEffect(() => {
+    /** Set volume from store once at the start */
+    const volume = useVolumeStore.getState().volume;
+    sounds.forEach(audio => audio.volume = volume);
+
+    /** Subscribe to changes in volume */
     const unsub = useVolumeStore.subscribe((state) => {
       sounds.forEach(audio => audio.volume = state.volume);
     });

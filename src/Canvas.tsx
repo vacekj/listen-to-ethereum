@@ -128,13 +128,18 @@ export function Canvas() {
       </Stack>
       <Container>
         <Title my={24} order={3}>
-          Listen to Ethereum is an experiment in generating music from blockchain activity.
+          Listen to Ethereum is an experiment in blockchain visualization.
         </Title>
         <Text>
-          It is inspired by{" "}
-          <a href={"https://listen.hatnote.com"} target={"_blank"}>Listen to Wikipedia</a>. Each transaction that comes
-          to the mempool is represented as a blob. When it gets included in a block, it grows in size and becomes solid.
-          A note is played for each transaction and block that appears.
+          . Each transaction that comes to the mempool is represented as a blob. When it gets included in a block, it
+          grows in size and becomes solid. A note is played for each transaction and block that appears.
+        </Text>
+        <Text>
+          Made by <a href="https://twitter.com/atris_eth">atris</a>
+        </Text>
+        <Text>
+          <a href="https://github.com/vacekj/listen-to-ethereum">source code</a> - Inspired by{" "}
+          <a href={"https://listen.hatnote.com"} target={"_blank"}>Listen to Wikipedia</a>
         </Text>
       </Container>
     </>
