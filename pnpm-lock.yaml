@@ -23,6 +23,7 @@ specifiers:
   typescript: ^5.1.3
   viem: ^1.0.7
   vite: ^4.1.1
+  vite-plugin-open-graph: ^1.1.5
   vite-plugin-radar: ^0.9.0
   vite-tsconfig-paths: ^4.2.0
   wagmi: ^1.2.0
@@ -56,6 +57,7 @@ devDependencies:
   '@vitejs/plugin-react': 4.0.0_vite@4.3.9
   typescript: 5.1.3
   vite: 4.3.9
+  vite-plugin-open-graph: 1.1.5
   vite-plugin-radar: 0.9.0_vite@4.3.9
 
 packages:
@@ -4325,6 +4327,10 @@ packages:
       - utf-8-validate
       - zod
     dev: false
+
+  /vite-plugin-open-graph/1.1.5:
+    resolution: {integrity: sha512-jWV5IXvg39vcCWEj013GytnG4L6HFcJVFC/FN74d8LUZOcH+MjLfpEgL4/e8H64oj2u20makzOcVjVrt6ZfXQg==}
+    dev: true
 
   /vite-plugin-radar/0.9.0_vite@4.3.9:
     resolution: {integrity: sha512-nKRSNMoZ8ehg2U/1rMSG9be53JrbEMzsARpbHJHgfHFe7TyIKr1ew2xvMol4TSNTeI6LKYroAqgpoxdbomBnTQ==}
