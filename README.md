@@ -8,7 +8,7 @@ todo list:
 - [x] fix block sound (doesn't play rn)
 - [ ] chain selector
 - [ ] mute/unmute by clicking on volume button
-- [ ] debouncing / anticrash => sound queue system, delay at least 50ms of each other
+- [x] debouncing / anticrash => sound queue system, delay at least 50ms of each other
 - [ ] better animation
 - [x] blobs are clickable to tx explorer
 - [ ] nicer UI
