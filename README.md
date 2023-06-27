@@ -16,6 +16,7 @@ todo list:
 - [ ] Blocks appear as big blobs and draw mempool txs into it (animated)
 - [ ] smol tps meter
 - [ ] txs, blocks listened count
+- [ ] Fix volume slider tooltip location to be under
 - [x] short explainer a-la hatnote
 - [x] google analytics
 - [x] OpenGraph for twitter sharing

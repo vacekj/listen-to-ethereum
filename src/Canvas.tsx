@@ -144,7 +144,7 @@ export function Canvas() {
           Made by <a href="https://twitter.com/atris_eth">atris</a>
         </Text>
         <Text mb={14}>
-          <a href="https://github.com/vacekj/listen-to-ethereum">source code</a> - Inspired by{" "}
+          <a href="https://github.com/vacekj/listen-to-ethereum" target={"_blank"}>source code</a> - Inspired by{" "}
           <a href={"https://listen.hatnote.com"} target={"_blank"}>Listen to Wikipedia</a>
         </Text>
       </Container>
