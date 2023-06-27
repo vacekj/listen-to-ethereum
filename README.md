@@ -8,7 +8,6 @@ todo list:
 
 - [ ] chain selector
 - [ ] mute/unmute by clicking on volume button
-- [x] debouncing / anticrash => sound queue system, delay at least 50ms of each other
 - [ ] better animation
 - [ ] Add click for sound reminder
 - [ ] nicer UI
@@ -17,6 +16,7 @@ todo list:
 - [ ] smol tps meter
 - [ ] txs, blocks listened count
 - [ ] Fix volume slider tooltip location to be under
+- [x] debouncing / anticrash => sound queue system, delay at least 50ms of each other
 - [x] short explainer a-la hatnote
 - [x] google analytics
 - [x] OpenGraph for twitter sharing
