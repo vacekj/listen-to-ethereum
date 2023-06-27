@@ -6,16 +6,15 @@ Inspired by [Listen to Wikipedia](https://listen.hatnote.com)
 
 todo list:
 
-- [ ] chain selector
 - [ ] mute/unmute by clicking on volume button
-- [ ] better animation
 - [ ] Add click for sound reminder
-- [ ] nicer UI
+- [ ] Blocks appear as big blobs and draw mempool/confirmed txs into it (animated)
 - [ ] Fullscreen mode
-- [ ] Blocks appear as big blobs and draw mempool txs into it (animated)
+- [ ] nicer UI
 - [ ] smol tps meter
 - [ ] txs, blocks listened count
 - [ ] Fix volume slider tooltip location to be under
+- [ ] multichain
 - [x] debouncing / anticrash => sound queue system, delay at least 50ms of each other
 - [x] short explainer a-la hatnote
 - [x] google analytics
